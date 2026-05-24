@@ -1,131 +1,759 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chained Stars Technology — Distill</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: Inter, sans-serif; }
-    .mono { font-family: 'JetBrains Mono', monospace; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chained Stars Technology — A Constellation of Companies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+/* ══════════════════════════════
+   DARK THEME (default)
+══════════════════════════════ */
+[data-theme="dark"]{
+  --bg-page:#04030A;
+  --bg-deep:#080613;
+  --bg-surface:#0D0A1E;
+  --bg-panel:#13102A;
+  --bg-rim:#1E1A38;
+  --gold:#C9A84C;
+  --gold-dim:#8A6E2E;
+  --gold-pale:rgba(201,168,76,0.12);
+  --gold-thin:rgba(201,168,76,0.18);
+  --text-primary:#F4F0E8;
+  --text-dim:rgba(244,240,232,0.55);
+  --text-faint:rgba(244,240,232,0.35);
+  --text-ghost:rgba(244,240,232,0.1);
+  --border-card:rgba(255,255,255,0.07);
+  --pixel:#5BCDF4;
+  --pixel-dim:rgba(91,205,244,0.15);
+  --repair:#F4845B;
+  --repair-dim:rgba(244,132,91,0.15);
+  --nav-bg:rgba(4,3,10,0.9);
+  --nav-scrolled:rgba(4,3,10,0.97);
+  --divider-color:#8A6E2E;
+  --orb-a:rgba(201,168,76,0.07);
+  --orb-b:rgba(75,0,130,0.06);
+  --footer-bg:#04030A;
+  --starfield-opacity:1;
+  --toggle-icon:"☀️";
+  --toggle-label:"Light";
+  --section-alt:#080613;
+}
+
+/* ══════════════════════════════
+   LIGHT THEME
+══════════════════════════════ */
+[data-theme="light"]{
+  --bg-page:#F5F2EA;
+  --bg-deep:#EDE9DF;
+  --bg-surface:#F9F7F2;
+  --bg-panel:#FFFFFF;
+  --bg-rim:#E2DDD4;
+  --gold:#9B7A28;
+  --gold-dim:#C9A84C;
+  --gold-pale:rgba(155,122,40,0.1);
+  --gold-thin:rgba(155,122,40,0.2);
+  --text-primary:#1A1610;
+  --text-dim:rgba(26,22,16,0.6);
+  --text-faint:rgba(26,22,16,0.4);
+  --text-ghost:rgba(26,22,16,0.08);
+  --border-card:rgba(26,22,16,0.1);
+  --pixel:#1A8DB5;
+  --pixel-dim:rgba(26,141,181,0.12);
+  --repair:#C45A2A;
+  --repair-dim:rgba(196,90,42,0.12);
+  --nav-bg:rgba(245,242,234,0.92);
+  --nav-scrolled:rgba(245,242,234,0.98);
+  --divider-color:#C9A84C;
+  --orb-a:rgba(155,122,40,0.06);
+  --orb-b:rgba(120,80,20,0.05);
+  --footer-bg:#EDE9DF;
+  --starfield-opacity:0.25;
+  --section-alt:#EDE9DF;
+}
+
+/* ─── BASE ─── */
+:root{
+  --radius:12px;
+  --gutter:clamp(20px,5vw,72px);
+  scroll-behavior:smooth;
+}
+html{background:var(--bg-page);color:var(--text-primary);transition:background 0.4s,color 0.4s;}
+body{font-family:'Syne',sans-serif;line-height:1.6;overflow-x:hidden;}
+::selection{background:var(--gold-pale);color:var(--gold);}
+
+/* ─── NOISE ─── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:0.4;
+}
+
+/* ─── STARFIELD ─── */
+#starfield{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:var(--starfield-opacity);transition:opacity 0.6s;}
+.page{position:relative;z-index:1;}
+
+/* ─── THEME TOGGLE ─── */
+.theme-toggle{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 16px;border-radius:20px;
+  border:1px solid var(--gold-dim);
+  background:var(--gold-pale);
+  cursor:pointer;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--gold);
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.theme-toggle:hover{background:var(--gold-thin);border-color:var(--gold);}
+.theme-toggle .t-track{
+  width:32px;height:18px;border-radius:9px;
+  background:var(--bg-rim);border:1px solid var(--gold-dim);
+  position:relative;transition:background 0.3s;flex-shrink:0;
+}
+.theme-toggle .t-thumb{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--gold);position:absolute;
+  top:2px;left:2px;
+  transition:transform 0.3s;
+}
+[data-theme="light"] .theme-toggle .t-thumb{transform:translateX(14px);}
+[data-theme="light"] .theme-toggle .t-track{background:var(--gold-pale);}
+.t-icon{font-size:13px;line-height:1;}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px var(--gutter);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:var(--nav-bg);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid transparent;
+  transition:background 0.3s,border-color 0.3s;
+}
+nav.scrolled{background:var(--nav-scrolled);border-color:var(--gold-pale);}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;}
+.nav-mark{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.nav-mark-inner{
+  width:18px;height:18px;
+  background:conic-gradient(var(--gold) 0deg,transparent 60deg,var(--gold) 120deg,transparent 180deg,var(--gold) 240deg,transparent 300deg,var(--gold) 360deg);
+  border-radius:50%;opacity:0.9;
+}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;letter-spacing:0.08em;color:var(--text-primary);}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.nav-github{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;border:1px solid var(--gold-dim);border-radius:6px;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;
+  transition:background 0.2s,border-color 0.2s;
+  white-space:nowrap;
+}
+.nav-github:hover{background:var(--gold-pale);border-color:var(--gold);}
+.nav-github svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
+@media(max-width:900px){.nav-links{display:none;}.nav-name{display:none;}.nav-github span{display:none;}}
+@media(max-width:500px){.theme-toggle .t-label{display:none;}.theme-toggle .t-track{display:none;}}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:120px var(--gutter) 80px;
+  text-align:center;position:relative;
+  background:var(--bg-page);
+}
+.hero-orb{
+  position:absolute;top:20%;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle at center,var(--orb-a) 0%,var(--orb-b) 50%,transparent 70%);
+  pointer-events:none;
+  animation:breathe 8s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.08);}}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--gold);letter-spacing:0.25em;text-transform:uppercase;
+  margin-bottom:32px;opacity:0;animation:fadeUp 0.9s 0.2s forwards;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:40px;height:1px;background:var(--gold);opacity:0.5;}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(52px,8vw,112px);font-weight:300;
+  line-height:0.95;letter-spacing:-0.02em;
+  color:var(--text-primary);margin-bottom:12px;
+  opacity:0;animation:fadeUp 1s 0.35s forwards;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(18px,2.8vw,30px);font-weight:300;
+  color:var(--text-dim);letter-spacing:0.06em;margin-bottom:48px;
+  opacity:0;animation:fadeUp 1s 0.5s forwards;
+}
+.hero-desc{
+  max-width:560px;font-size:15px;line-height:1.9;
+  color:var(--text-faint);font-weight:400;margin-bottom:56px;
+  opacity:0;animation:fadeUp 1s 0.65s forwards;
+}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp 1s 0.8s forwards;}
+.btn-primary{
+  padding:14px 34px;background:var(--gold);color:#fff;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  text-decoration:none;border-radius:6px;
+  transition:opacity 0.2s,transform 0.2s;
+}
+[data-theme="dark"] .btn-primary{color:#04030A;}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-outline{
+  padding:14px 34px;
+  border:1px solid var(--border-card);color:var(--text-dim);
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  letter-spacing:0.18em;text-transform:uppercase;
+  text-decoration:none;border-radius:6px;
+  transition:border-color 0.2s,color 0.2s,transform 0.2s;
+}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px);}
+.hero-scroll{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeUp 1s 1.2s forwards;
+}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+.scroll-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--gold);opacity:0.5;text-transform:uppercase;}
+@keyframes scrollPulse{0%,100%{transform:scaleY(1);opacity:1;}50%{transform:scaleY(0.7);opacity:0.4;}}
+
+/* ─── SHARED SECTION ─── */
+section{padding:100px var(--gutter);}
+.section-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-tag::before{content:'';display:block;width:24px;height:1px;background:var(--gold);}
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,5vw,64px);font-weight:300;line-height:1.05;
+  color:var(--text-primary);margin-bottom:20px;
+}
+.section-title em{font-style:italic;color:var(--gold);}
+.section-body{font-size:15px;line-height:1.9;color:var(--text-dim);max-width:560px;}
+
+/* ─── DIVIDER ─── */
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,var(--divider-color),transparent);opacity:0.35;}
+
+/* ─── ABOUT ─── */
+#about{background:var(--section-alt);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:0 auto;}
+.about-visual{position:relative;}
+.about-ring-wrap{display:flex;align-items:center;justify-content:center;}
+.constellation-svg{width:100%;max-width:380px;}
+.about-pillars{display:flex;flex-direction:column;gap:32px;margin-top:48px;}
+.pillar{display:flex;gap:20px;align-items:flex-start;}
+.pillar-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);opacity:0.6;padding-top:3px;flex-shrink:0;width:28px;}
+.pillar-title{font-size:14px;font-weight:700;letter-spacing:0.06em;color:var(--text-primary);margin-bottom:5px;text-transform:uppercase;}
+.pillar-text{font-size:13px;line-height:1.8;color:var(--text-faint);}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:40px;}.about-visual{display:none;}}
+
+/* ─── COMPANIES ─── */
+#companies{background:var(--bg-surface);}
+.companies-inner{max-width:1200px;margin:0 auto;}
+.companies-header{margin-bottom:64px;}
+.companies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;}
+.company-card{
+  background:var(--bg-panel);border:1px solid var(--bg-rim);border-radius:var(--radius);
+  padding:36px 32px;position:relative;overflow:hidden;
+  text-decoration:none;color:inherit;
+  transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;display:block;
+}
+.company-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-pale),transparent 60%);
+  opacity:0;transition:opacity 0.3s;
+}
+.company-card:hover{border-color:var(--gold-dim);transform:translateY(-4px);}
+[data-theme="light"] .company-card:hover{box-shadow:0 12px 40px rgba(26,22,16,0.1);}
+[data-theme="dark"] .company-card:hover{box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.company-card:hover::before{opacity:1;}
+.company-card.featured{border-color:var(--gold-dim);}
+.company-card.featured::after{
+  content:'FLAGSHIP';position:absolute;top:20px;right:20px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;color:var(--gold);
+  background:var(--gold-pale);padding:4px 10px;border-radius:4px;
+  border:1px solid var(--gold-thin);
+}
+.cc-icon{
+  width:48px;height:48px;border-radius:10px;background:var(--bg-rim);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:22px;font-size:22px;
+  border:1px solid var(--border-card);position:relative;z-index:1;
+}
+.pixel-card .cc-icon{background:var(--pixel-dim);border-color:rgba(91,205,244,0.2);}
+.repair-card .cc-icon{background:var(--repair-dim);border-color:rgba(244,132,91,0.2);}
+.cc-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--text-primary);margin-bottom:4px;position:relative;z-index:1;}
+.cc-tagline{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:18px;position:relative;z-index:1;}
+.repair-card .cc-tagline{color:var(--repair);}
+.cc-desc{font-size:13px;line-height:1.8;color:var(--text-faint);margin-bottom:24px;position:relative;z-index:1;}
+.cc-tags{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1;}
+.cc-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:4px 12px;border-radius:100px;
+  background:var(--text-ghost);color:var(--text-dim);
+  border:1px solid var(--border-card);letter-spacing:0.06em;
+}
+.pixel-card .cc-tag{background:var(--pixel-dim);color:var(--pixel);border-color:rgba(91,205,244,0.2);}
+.repair-card .cc-tag{background:var(--repair-dim);color:var(--repair);border-color:rgba(244,132,91,0.15);}
+.cc-arrow{
+  position:absolute;bottom:28px;right:28px;font-size:18px;color:var(--gold);
+  opacity:0;transform:translateX(-8px);transition:opacity 0.25s,transform 0.25s;z-index:1;
+}
+.company-card:hover .cc-arrow{opacity:1;transform:translateX(0);}
+.coming-card{
+  background:transparent;border:1px dashed var(--bg-rim);border-radius:var(--radius);
+  padding:36px 32px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:220px;
+}
+.coming-plus{
+  width:40px;height:40px;border-radius:8px;border:1px dashed var(--bg-rim);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  color:var(--text-dim);margin-bottom:20px;
+}
+.coming-label{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--text-faint);}
+
+/* ─── GITHUB ─── */
+#github{background:var(--section-alt);position:relative;overflow:hidden;}
+#github::before{
+  content:'';position:absolute;bottom:-200px;right:-200px;
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,var(--orb-b) 0%,transparent 70%);pointer-events:none;
+}
+.github-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.github-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;}
+.gstat{background:var(--bg-panel);border:1px solid var(--bg-rim);border-radius:10px;padding:20px 22px;}
+.gstat-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:var(--gold);line-height:1;margin-bottom:4px;}
+.gstat-label{font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;}
+.github-url{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);
+  letter-spacing:0.1em;background:var(--gold-pale);border:1px solid var(--gold-thin);
+  padding:12px 18px;border-radius:8px;display:inline-block;margin-bottom:24px;
+}
+.repo-preview{background:var(--bg-panel);border:1px solid var(--bg-rim);border-radius:10px;overflow:hidden;}
+.repo-header{padding:14px 18px;border-bottom:1px solid var(--bg-rim);display:flex;align-items:center;gap:10px;}
+.repo-dot{width:8px;height:8px;border-radius:50%;}
+.repo-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);}
+.repo-body{padding:16px 18px;display:flex;flex-direction:column;gap:10px;}
+.repo-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-radius:8px;
+  background:var(--bg-surface);border:1px solid var(--border-card);
+  text-decoration:none;transition:border-color 0.2s;
+}
+.repo-row:hover{border-color:var(--gold-dim);}
+.repo-row-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-primary);}
+.repo-row-star{font-size:11px;color:var(--text-dim);}
+.repo-row-lang{font-size:10px;color:var(--gold);font-family:'JetBrains Mono',monospace;}
+@media(max-width:900px){.github-inner{grid-template-columns:1fr;gap:40px;}}
+
+/* ─── FOOTER ─── */
+footer{background:var(--footer-bg);border-top:1px solid var(--gold-pale);padding:64px var(--gutter) 40px;}
+.footer-inner{max-width:1200px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:56px;padding-bottom:48px;border-bottom:1px solid var(--bg-rim);}
+.footer-brand-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--text-primary);margin-bottom:6px;}
+.footer-brand-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:14px;}
+.footer-tagline{font-size:13px;line-height:1.8;color:var(--text-faint);max-width:320px;}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:18px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:13px;color:var(--text-faint);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.footer-copy{font-size:12px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
+.footer-badges{display:flex;gap:10px;}
+.footer-badge{font-family:'JetBrains Mono',monospace;font-size:9px;padding:4px 12px;border-radius:4px;border:1px solid var(--bg-rim);color:var(--text-faint);letter-spacing:0.1em;text-transform:uppercase;}
+@media(max-width:760px){.footer-top{grid-template-columns:1fr;gap:32px;}}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased">
-  <div class="min-h-screen">
-    <header class="border-b border-slate-800 sticky top-0 backdrop-blur bg-slate-950/90 z-50">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div>
-          <div class="font-bold text-lg tracking-wide">Chained Stars Technology</div>
-          <div class="text-xs text-slate-400 mono">Engineered for speed. Built for trust.</div>
-        </div>
-        <div class="flex gap-3">
-          <a href="#pricing" class="px-4 py-2 rounded-2xl border border-slate-700 hover:border-amber-400 transition">Pricing</a>
-          <a href="#contact" class="px-4 py-2 rounded-2xl bg-amber-400 text-slate-950 font-semibold">Enterprise</a>
-        </div>
-      </div>
-    </header>
+<body>
 
-    <section class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-800 text-sm text-slate-300 mb-6">
-          <i data-lucide="cpu"></i>
-          Rust + Tauri Desktop Performance
-        </div>
-        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
-          Clean duplicates faster.<br>
-          Merge documents intelligently.
-        </h1>
-        <p class="text-slate-300 text-lg leading-8 max-w-xl mb-8">
-          Distill is a high-speed desktop utility engineered for modern systems. Built in Rust and Tauri for fast duplicate cleaning, efficient file discovery, and AI-powered document merging with a tiny memory footprint.
-        </p>
-        <div class="flex flex-wrap gap-4">
-          <a href="#" class="px-6 py-3 rounded-2xl bg-amber-400 text-slate-950 font-semibold">Download</a>
-          <a href="#" class="px-6 py-3 rounded-2xl border border-slate-700">GitHub</a>
-        </div>
-      </div>
-      <div class="rounded-3xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
-        <div class="grid grid-cols-2 gap-4 text-sm">
-          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
-            <div class="text-amber-400 font-semibold">Native Speed</div>
-            <div class="text-slate-400 mt-2">Compiled systems performance with Rust memory safety.</div>
-          </div>
-          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
-            <div class="text-slate-200 font-semibold">Local First</div>
-            <div class="text-slate-400 mt-2">Your files remain on your machine.</div>
-          </div>
-        </div>
-      </div>
-    </section>
+<canvas id="starfield"></canvas>
 
-    <section class="max-w-7xl mx-auto px-6 py-16" id="stack">
-      <h2 class="text-3xl font-bold mb-8">The Tech Stack</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-3xl border border-slate-800 bg-slate-900">Rust provides memory safety, predictable performance, and strong systems-level reliability.</div>
-        <div class="p-6 rounded-3xl border border-slate-800 bg-slate-900">Tauri delivers lightweight native desktop distribution with minimal runtime overhead.</div>
-        <div class="p-6 rounded-3xl border border-slate-800 bg-slate-900">Together they enable fast scanning, low resource usage, and enterprise-grade stability.</div>
-      </div>
-    </section>
+<div class="page">
 
-    <section class="max-w-7xl mx-auto px-6 py-16" id="pricing">
-      <h2 class="text-3xl font-bold mb-8">Pricing</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="p-8 rounded-3xl border border-slate-800 bg-slate-900">
-          <div class="font-semibold mb-2">Community</div>
-          <div class="text-4xl font-bold mb-4">$0</div>
-          <p class="text-slate-400">Open Core for the developer community.</p>
-        </div>
-        <div class="p-8 rounded-3xl border border-amber-400 bg-slate-900">
-          <div class="font-semibold mb-2">Pro</div>
-          <div class="text-4xl font-bold mb-4">$19</div>
-          <p class="text-slate-400">Lifetime access for individuals. Includes AI document merging.</p>
-        </div>
-        <div class="p-8 rounded-3xl border border-slate-800 bg-slate-900">
-          <div class="font-semibold mb-2">Enterprise</div>
-          <div class="text-4xl font-bold mb-4">Custom</div>
-          <p class="text-slate-400">Volume licensing and priority support for organizations.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="max-w-7xl mx-auto px-6 py-16">
-      <div class="p-8 rounded-3xl border border-slate-800 bg-slate-900">
-        <h2 class="text-3xl font-bold mb-4">Built by an IPMC-Certified System Engineer</h2>
-        <p class="text-slate-300 leading-8">
-          Deep expertise in hardware diagnostics, Linux kernels, and Cisco networking. Founder certifications include A+, Network+, and Linux from IPMC Ghana, supported by practical CCNA knowledge.
-        </p>
-      </div>
-    </section>
-
-    <section class="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-8">
-      <div class="p-8 rounded-3xl border border-slate-800 bg-slate-900">
-        <h3 class="text-2xl font-semibold mb-4">License & Terms</h3>
-        <p class="text-slate-400 leading-8">Distill is licensed for personal use under the Community edition. Commercial deployment, redistribution, internal enterprise rollout, or resale requires an active paid license. Chained Stars Technology disclaims liability for indirect loss, operational interruption, or data misuse arising from software usage.</p>
-      </div>
-      <div class="p-8 rounded-3xl border border-slate-800 bg-slate-900">
-        <h3 class="text-2xl font-semibold mb-4">Privacy Policy</h3>
-        <p class="text-slate-400 leading-8">Local-first architecture. Files, metadata, and processing remain on the user’s machine. No document contents leave the device unless explicitly initiated by the user.</p>
-      </div>
-    </section>
-
-    <section class="max-w-4xl mx-auto px-6 py-16" id="contact">
-      <div class="p-8 rounded-3xl border border-slate-800 bg-slate-900">
-        <h2 class="text-3xl font-bold mb-6">Contact for Enterprise</h2>
-        <form class="grid gap-4">
-          <input class="px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800" placeholder="Company Name">
-          <input class="px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800" placeholder="Business Email">
-          <textarea class="px-4 py-3 rounded-2xl bg-slate-950 border border-slate-800 min-h-32" placeholder="Tell us about licensing requirements"></textarea>
-          <button class="px-6 py-3 rounded-2xl bg-amber-400 text-slate-950 font-semibold w-fit">Send Inquiry</button>
-        </form>
-      </div>
-    </section>
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-brand">
+    <div class="nav-mark"><div class="nav-mark-inner"></div></div>
+    <span class="nav-name">Chained Stars</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">Manifesto</a></li>
+    <li><a href="#companies">Ventures</a></li>
+    <li><a href="#github">GitHub</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle colour theme">
+      <span class="t-icon" id="t-icon">🌙</span>
+      <div class="t-track"><div class="t-thumb"></div></div>
+      <span class="t-label" id="t-label">Dark</span>
+    </button>
+    <a href="https://github.com/chained-stars" target="_blank" rel="noopener" class="nav-github">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.165 6.839 9.489.5.09.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.907-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.577.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+      <span>Follow on GitHub</span>
+    </a>
   </div>
+</nav>
 
-  <script>
-    lucide.createIcons();
-  </script>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-eyebrow">Accra, Ghana &nbsp;·&nbsp; Est. 2019 &nbsp;·&nbsp; Building Africa's Tech Horizon</div>
+  <h1 class="hero-title">Chained<br><em>Stars</em></h1>
+  <p class="hero-sub">A Constellation of Ventures</p>
+  <p class="hero-desc">
+    We are CST Company Ltd — a Ghanaian holding group founded in 2019 and forged through years of quiet, ground-up work. Today we step into the open: a constellation of technology ventures united by one ambition — to build world-class products and people from the African continent.
+  </p>
+  <div class="hero-ctas">
+    <a href="#companies" class="btn-primary">Explore Ventures</a>
+    <a href="https://github.com/chained-stars" target="_blank" rel="noopener" class="btn-outline">Follow on GitHub</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-label">Scroll</div>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-ring-wrap">
+        <svg class="constellation-svg" viewBox="0 0 380 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="190" cy="190" r="170" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+          <circle cx="190" cy="190" r="130" stroke="rgba(201,168,76,0.12)" stroke-width="1" stroke-dasharray="4 8"/>
+          <circle cx="190" cy="190" r="80" stroke="rgba(201,168,76,0.2)" stroke-width="0.5"/>
+          <circle cx="190" cy="190" r="8" fill="rgba(201,168,76,0.3)" stroke="#C9A84C" stroke-width="1"/>
+          <circle cx="190" cy="190" r="3" fill="#C9A84C"/>
+          <circle cx="190" cy="60" r="5" fill="rgba(91,205,244,0.8)" stroke="rgba(91,205,244,0.4)" stroke-width="6"/>
+          <circle cx="300" cy="130" r="4" fill="rgba(201,168,76,0.6)" stroke="rgba(201,168,76,0.2)" stroke-width="5"/>
+          <circle cx="310" cy="260" r="3.5" fill="rgba(244,132,91,0.8)" stroke="rgba(244,132,91,0.3)" stroke-width="5"/>
+          <circle cx="190" cy="320" r="3" fill="rgba(201,168,76,0.4)" stroke="rgba(201,168,76,0.1)" stroke-width="5"/>
+          <circle cx="80" cy="260" r="3.5" fill="rgba(255,255,255,0.3)" stroke="rgba(255,255,255,0.1)" stroke-width="5"/>
+          <circle cx="70" cy="130" r="4" fill="rgba(201,168,76,0.5)" stroke="rgba(201,168,76,0.15)" stroke-width="5"/>
+          <line x1="190" y1="182" x2="190" y2="65" stroke="rgba(91,205,244,0.3)" stroke-width="0.5"/>
+          <line x1="197" y1="185" x2="296" y2="133" stroke="rgba(201,168,76,0.25)" stroke-width="0.5"/>
+          <line x1="197" y1="195" x2="306" y2="258" stroke="rgba(244,132,91,0.3)" stroke-width="0.5"/>
+          <line x1="190" y1="198" x2="190" y2="317" stroke="rgba(201,168,76,0.15)" stroke-width="0.5"/>
+          <line x1="183" y1="195" x2="84" y2="258" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
+          <line x1="183" y1="185" x2="74" y2="133" stroke="rgba(201,168,76,0.2)" stroke-width="0.5"/>
+          <line x1="190" y1="60" x2="300" y2="130" stroke="rgba(201,168,76,0.12)" stroke-width="0.5" stroke-dasharray="3 6"/>
+          <line x1="300" y1="130" x2="310" y2="260" stroke="rgba(201,168,76,0.1)" stroke-width="0.5" stroke-dasharray="3 6"/>
+          <text x="200" y="52" fill="rgba(91,205,244,0.7)" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="0.15em">PIXEL PULSE</text>
+          <text x="314" y="125" fill="rgba(201,168,76,0.5)" font-family="'JetBrains Mono',monospace" font-size="8">CST DIGITAL</text>
+          <text x="316" y="260" fill="rgba(244,132,91,0.6)" font-family="'JetBrains Mono',monospace" font-size="8">CST REPAIR</text>
+          <text x="130" y="340" fill="rgba(201,168,76,0.3)" font-family="'JetBrains Mono',monospace" font-size="8">FUTURE</text>
+          <text x="18" y="260" fill="rgba(255,255,255,0.2)" font-family="'JetBrains Mono',monospace" font-size="8">FUTURE</text>
+          <text x="28" y="122" fill="rgba(201,168,76,0.35)" font-family="'JetBrains Mono',monospace" font-size="8">GTT</text>
+          <text x="190" y="213" fill="rgba(201,168,76,0.6)" font-family="'Cormorant Garamond',serif" font-size="10" text-anchor="middle" letter-spacing="0.2em">CHAINED STARS</text>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <div class="section-tag reveal">Manifesto</div>
+      <h2 class="section-title reveal">We build the <em>infrastructure</em> of tomorrow's Africa</h2>
+      <p class="section-body reveal">
+        Every great constellation is made of individual stars — each brilliant on its own, each more powerful in relation to the others. Chained Stars is that constellation for Ghanaian tech. Founded in 2019, built quietly, and now stepping into the public eye.
+      </p>
+      <div class="about-pillars">
+        <div class="pillar reveal">
+          <span class="pillar-num">01</span>
+          <div>
+            <div class="pillar-title">Software &amp; Hardware</div>
+            <div class="pillar-text">Every company under our holding builds and fixes — code, circuits, and everything in between. We ship real products and repair real devices for real users.</div>
+          </div>
+        </div>
+        <div class="pillar reveal">
+          <span class="pillar-num">02</span>
+          <div>
+            <div class="pillar-title">People as Infrastructure</div>
+            <div class="pillar-text">We train the next generation through Pixel Pulse Institute — because talent is the longest infrastructure investment.</div>
+          </div>
+        </div>
+        <div class="pillar reveal">
+          <span class="pillar-num">03</span>
+          <div>
+            <div class="pillar-title">Open by Default</div>
+            <div class="pillar-text">6 years of quiet work, now building in public. Our GitHub is the record of everything we ship.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPANIES -->
+<section id="companies">
+  <div class="companies-inner">
+    <div class="companies-header">
+      <div class="section-tag reveal">Our Ventures</div>
+      <h2 class="section-title reveal">The <em>constellation</em></h2>
+      <p class="section-body reveal">Each company is independently operated, purpose-built, and interconnected through shared ownership, shared standards, and shared ambition.</p>
+    </div>
+    <div class="companies-grid">
+
+      <a href="https://github.com/chained-stars/pixel-pulse" target="_blank" rel="noopener" class="company-card pixel-card featured reveal">
+        <div class="cc-icon">🎓</div>
+        <div class="cc-name">Pixel Pulse</div>
+        <div class="cc-tagline">Institute of Technology</div>
+        <div class="cc-desc">Ghana's premier practical tech training school. Hands-on tracks across hardware, software, AI, graphics, mobile, networking, databases, and digital marketing — built for career-readiness from day one.</div>
+        <div class="cc-tags">
+          <span class="cc-tag">Education</span>
+          <span class="cc-tag">8 Tracks</span>
+          <span class="cc-tag">Accra, GH</span>
+          <span class="cc-tag">2026 Cohort Open</span>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+
+      <a href="#" class="company-card reveal">
+        <div class="cc-icon">🖨️</div>
+        <div class="cc-name">Pixel Pulse GTT</div>
+        <div class="cc-tagline">Graphics, Tees &amp; Trophies</div>
+        <div class="cc-desc">Creative production house delivering brand identity, print media, apparel graphics, and trophy/awards work. Where design becomes tangible.</div>
+        <div class="cc-tags">
+          <span class="cc-tag">Creative</span>
+          <span class="cc-tag">Print</span>
+          <span class="cc-tag">Brand Design</span>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+
+      <a href="#" class="company-card reveal">
+        <div class="cc-icon">💻</div>
+        <div class="cc-name">CST Digital Agency</div>
+        <div class="cc-tagline">Digital Solutions</div>
+        <div class="cc-desc">Full-service digital agency handling web development, app development, UI/UX design, and digital marketing campaigns for businesses across Ghana and beyond.</div>
+        <div class="cc-tags">
+          <span class="cc-tag">Web Dev</span>
+          <span class="cc-tag">App Dev</span>
+          <span class="cc-tag">Digital Mktg</span>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+
+      <a href="#" class="company-card repair-card reveal">
+        <div class="cc-icon">🔧</div>
+        <div class="cc-name">CST TechRepair</div>
+        <div class="cc-tagline">Hardware &amp; Electronics Services</div>
+        <div class="cc-desc">End-to-end repair and build services for all electronics — smartphones, computers, laptops, IoT devices, televisions, and more. Diagnostics, component-level repair, custom builds, and preventive maintenance.</div>
+        <div class="cc-tags">
+          <span class="cc-tag">Phones</span>
+          <span class="cc-tag">Computers</span>
+          <span class="cc-tag">IoT Devices</span>
+          <span class="cc-tag">TVs</span>
+          <span class="cc-tag">Custom Builds</span>
+        </div>
+        <div class="cc-arrow">→</div>
+      </a>
+
+      <div class="coming-card reveal">
+        <div class="coming-plus">+</div>
+        <div class="coming-label">Next venture forming — watch this space.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GITHUB -->
+<section id="github">
+  <div class="github-inner">
+    <div>
+      <div class="section-tag reveal">Open Source</div>
+      <h2 class="section-title reveal">Built in <em>public</em></h2>
+      <p class="section-body reveal">
+        Since 2019 we've been building quietly. Now the work goes public. Our GitHub organisation is the living record of everything we build — follow the org to stay updated as we ship curriculum tools, internal utilities, and open-source projects from across our ventures.
+      </p>
+      <div class="github-stats reveal">
+        <div class="gstat"><div class="gstat-num">4</div><div class="gstat-label">Active Ventures</div></div>
+        <div class="gstat"><div class="gstat-num">6+</div><div class="gstat-label">Years Operating</div></div>
+        <div class="gstat"><div class="gstat-num">8+</div><div class="gstat-label">Training Tracks</div></div>
+        <div class="gstat"><div class="gstat-num">∞</div><div class="gstat-label">Ambition</div></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="github-url">github.com/chained-stars</div>
+      <div class="repo-preview">
+        <div class="repo-header">
+          <div class="repo-dot" style="background:#ff5f57"></div>
+          <div class="repo-dot" style="background:#febc2e"></div>
+          <div class="repo-dot" style="background:#28c840"></div>
+          <span class="repo-name">chained-stars / repositories</span>
+        </div>
+        <div class="repo-body">
+          <a href="#" class="repo-row"><span class="repo-row-name">pixel-pulse-site</span><span class="repo-row-lang">HTML · CSS · JS</span><span class="repo-row-star">★ flagship</span></a>
+          <a href="#" class="repo-row"><span class="repo-row-name">cst-digital-agency</span><span class="repo-row-lang">TypeScript</span><span class="repo-row-star">★</span></a>
+          <a href="#" class="repo-row"><span class="repo-row-name">ppit-curriculum-tools</span><span class="repo-row-lang">Python</span><span class="repo-row-star">★</span></a>
+          <a href="#" class="repo-row"><span class="repo-row-name">cst-techrepair</span><span class="repo-row-lang">Assets</span><span class="repo-row-star">★</span></a>
+        </div>
+      </div>
+      <div style="margin-top:24px;">
+        <a href="https://github.com/chained-stars" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block;">Follow the Org on GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">Chained Stars</div>
+        <div class="footer-brand-sub">CST Company Ltd</div>
+        <p class="footer-tagline">Founded in 2019 and built through years of quiet, ground-up work — CST Company Ltd is now stepping into the public eye. A constellation of technology ventures building from Accra to the world.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Ventures</div>
+        <ul class="footer-links">
+          <li><a href="#">Pixel Pulse Institute</a></li>
+          <li><a href="#">Pixel Pulse GTT</a></li>
+          <li><a href="#">CST Digital Agency</a></li>
+          <li><a href="#">CST TechRepair</a></li>
+          <li><a href="#">More coming soon</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/chained-stars" target="_blank" rel="noopener">GitHub Org</a></li>
+          <li><a href="#">Accra, Ghana</a></li>
+          <li><a href="#">WhatsApp Business</a></li>
+          <li><a href="#">Facebook · Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2019–2026 CST Company Ltd — Chained Stars. All rights reserved. Ghana 🇬🇭</div>
+      <div class="footer-badges">
+        <span class="footer-badge">GRA Registered</span>
+        <span class="footer-badge">CTVET Accredited</span>
+        <span class="footer-badge">Est. 2019</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page -->
+
+<script>
+/* ── THEME ── */
+(function(){
+  var saved = localStorage.getItem('cst-theme');
+  if(saved) document.documentElement.setAttribute('data-theme', saved);
+  updateToggleUI();
+})();
+
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme');
+  var next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('cst-theme', next);
+  updateToggleUI();
+}
+
+function updateToggleUI(){
+  var theme = document.documentElement.getAttribute('data-theme');
+  var icon = document.getElementById('t-icon');
+  var label = document.getElementById('t-label');
+  if(!icon) return;
+  if(theme === 'dark'){
+    icon.textContent = '🌙';
+    label.textContent = 'Dark';
+  } else {
+    icon.textContent = '☀️';
+    label.textContent = 'Light';
+  }
+}
+
+/* ── STARFIELD ── */
+(function(){
+  var c = document.getElementById('starfield');
+  var ctx = c.getContext('2d');
+  var W, H, stars = [];
+  function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; init(); }
+  function init(){
+    stars = [];
+    var n = Math.floor(W * H / 5000);
+    for(var i = 0; i < n; i++){
+      stars.push({
+        x: Math.random()*W, y: Math.random()*H,
+        r: Math.random()*1.2+0.2,
+        a: Math.random(),
+        da: (Math.random()-0.5)*0.003,
+        speed: Math.random()*0.04+0.01
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(function(s){
+      s.a += s.da;
+      if(s.a > 1 || s.a < 0.1) s.da *= -1;
+      s.y -= s.speed;
+      if(s.y < 0){ s.y = H; s.x = Math.random()*W; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(244,240,232,' + (s.a * 0.7) + ')';
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize);
+  resize(); draw();
+})();
+
+/* ── NAV SCROLL ── */
+(function(){
+  var nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', scrollY > 60);
+  });
+})();
+
+/* ── SCROLL REVEAL ── */
+(function(){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+})();
+</script>
 </body>
 </html>
